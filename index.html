@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Book modern ASMR-inspired massage sessions with Suzzy's ASMR in Lekki, Lagos."
+    />
+    <title>Suzzy's ASMR | Massage & Relaxation in Lekki</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="Suzzy's ASMR home">
+        <span class="brand-mark">S</span>
+        <span>Suzzy's ASMR</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" data-nav-toggle>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav-links" data-nav>
+        <a href="#services">Services</a>
+        <a href="#experience">Experience</a>
+        <a href="#booking">Booking</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="header-cta" href="https://wa.me/2347044325816" target="_blank" rel="noreferrer">Book on WhatsApp</a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media">
+          <img src="assets/session-massage.jpeg" alt="Suzzy giving a calming neck and shoulder massage session" />
+          <div class="hero-card" aria-label="Current booking highlight">
+            <span>Next booking window</span>
+            <strong data-next-window>Monday, 10AM - 8PM</strong>
+          </div>
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Private ASMR Massage Studio • Lekki</p>
+          <h1 id="hero-title">Suzzy's ASMR</h1>
+          <p class="hero-text">
+            Slow, intentional massage sessions designed for deep calm, gentle sensory relief, and a softer reset for
+            your body.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#booking">Book a Session</a>
+            <a class="button secondary" href="#services">View Services</a>
+          </div>
+          <div class="quick-book" aria-label="Quick service picker">
+            <button
+              class="quick-chip is-active"
+              type="button"
+              data-service-pick="Relaxation Massage - 1 Hour - ₦100,000"
+            >
+              1hr Relaxation
+            </button>
+            <button
+              class="quick-chip"
+              type="button"
+              data-service-pick="Back, Neck & Shoulder Massage - 30 Minutes - ₦35,000"
+            >
+              Neck & Shoulder
+            </button>
+            <button
+              class="quick-chip"
+              type="button"
+              data-service-pick="Head & Scalp Massage - 30 Minutes - ₦35,000"
+            >
+              Scalp
+            </button>
+          </div>
+          <dl class="hero-stats" aria-label="Service highlights">
+            <div>
+              <dt>Location</dt>
+              <dd>Lekki, Lagos</dd>
+            </div>
+            <div>
+              <dt>Open</dt>
+              <dd>Mon - Sun</dd>
+            </div>
+            <div>
+              <dt>From</dt>
+              <dd>₦35,000</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="section intro-section reveal" id="experience">
+        <div class="section-heading">
+          <p class="eyebrow">The Experience</p>
+          <h2>Massage with the quiet detail of ASMR.</h2>
+        </div>
+        <div class="intro-grid">
+          <article class="intro-text">
+            <p>
+              Suzzy's ASMR blends therapeutic touch with a calm sensory atmosphere: headphones, soothing pacing,
+              focused pressure, and a private setting made for unwinding.
+            </p>
+            <p>
+              Ideal for clients who want relief from shoulder tension, scalp stress, or a full hour of restorative
+              stillness.
+            </p>
+            <div class="mood-player" aria-label="ASMR mood selector">
+              <button class="mood-button is-active" type="button" data-mood="Whisper calm">
+                <span></span>
+                Whisper calm
+              </button>
+              <button class="mood-button" type="button" data-mood="Soft pressure">
+                <span></span>
+                Soft pressure
+              </button>
+              <button class="mood-button" type="button" data-mood="Scalp focus">
+                <span></span>
+                Scalp focus
+              </button>
+              <p data-mood-output>Whisper calm selected for a slower, lighter session pace.</p>
+            </div>
+          </article>
+          <article class="portrait-card">
+            <img src="assets/suzzy-portrait.jpeg" alt="Portrait of Suzzy" />
+            <div>
+              <span>Hosted by</span>
+              <strong>Susan Efionayi</strong>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section services-section reveal" id="services">
+        <div class="section-heading">
+          <p class="eyebrow">Services</p>
+          <h2>Choose your calm.</h2>
+        </div>
+        <div class="services-grid">
+          <article
+            class="service-card featured is-selected"
+            tabindex="0"
+            data-service-card
+            data-service-value="Relaxation Massage - 1 Hour - ₦100,000"
+          >
+            <div>
+              <span class="service-label">Signature</span>
+              <h3>Relaxation Massage</h3>
+              <p>A full-body reset for easing stress, softening muscle tension, and settling your nervous system.</p>
+            </div>
+            <div class="service-meta">
+              <span>1 Hour</span>
+              <strong>₦100,000</strong>
+            </div>
+          </article>
+          <article
+            class="service-card"
+            tabindex="0"
+            data-service-card
+            data-service-value="Back, Neck & Shoulder Massage - 30 Minutes - ₦35,000"
+          >
+            <div>
+              <span class="service-label">Focused</span>
+              <h3>Back, Neck & Shoulder Massage</h3>
+              <p>Targeted relief for common tension areas, especially after long workdays or screen-heavy weeks.</p>
+            </div>
+            <div class="service-meta">
+              <span>30 Minutes</span>
+              <strong>₦35,000</strong>
+            </div>
+          </article>
+          <article
+            class="service-card"
+            tabindex="0"
+            data-service-card
+            data-service-value="Head & Scalp Massage - 30 Minutes - ₦35,000"
+          >
+            <div>
+              <span class="service-label">Sensory</span>
+              <h3>Head & Scalp Massage</h3>
+              <p>Gentle scalp work for mental quiet, lighter pressure, and a deeply soothing ASMR-style finish.</p>
+            </div>
+            <div class="service-meta">
+              <span>30 Minutes</span>
+              <strong>₦35,000</strong>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="split-section reveal">
+        <div class="media-panel">
+          <img src="assets/session-massage.jpeg" alt="ASMR massage session with headphones" />
+        </div>
+        <div class="detail-panel">
+          <p class="eyebrow">Availability</p>
+          <h2>Open every day of the week.</h2>
+          <div class="schedule-list">
+            <button type="button" data-day-pick="Monday">
+              <span>Monday</span>
+              <strong>10AM - 8PM</strong>
+            </button>
+            <button type="button" data-day-pick="Tuesday">
+              <span>Tuesday</span>
+              <strong>10AM - 8PM</strong>
+            </button>
+            <button type="button" data-day-pick="Wednesday">
+              <span>Wednesday</span>
+              <strong>10AM - 8PM</strong>
+            </button>
+            <button type="button" data-day-pick="Thursday">
+              <span>Thursday</span>
+              <strong>10AM - 8PM</strong>
+            </button>
+            <button type="button" data-day-pick="Friday">
+              <span>Friday</span>
+              <strong>10AM - 8PM</strong>
+            </button>
+            <button type="button" data-day-pick="Saturday">
+              <span>Saturday</span>
+              <strong>10AM - 8PM</strong>
+            </button>
+            <button type="button" data-day-pick="Sunday">
+              <span>Sunday</span>
+              <strong>1PM - 5PM</strong>
+            </button>
+          </div>
+          <p>
+            Sessions take place at Royal Pine Gate 3, Orchid Road, Lekki, Lagos State. Payment is required before your
+            booking is confirmed.
+          </p>
+        </div>
+      </section>
+
+      <section class="section booking-section reveal" id="booking">
+        <div class="booking-copy">
+          <p class="eyebrow">Booking</p>
+          <h2>Send your preferred session and time.</h2>
+          <p>
+            Pick a service, add your preferred day, then continue on WhatsApp. You will receive payment instructions and
+            confirmation directly.
+          </p>
+          <div class="policy-list" aria-label="Booking policy">
+            <span>Payment before confirmation</span>
+            <span>24-hour cancellation notice</span>
+            <span>80% refund for cancellations</span>
+          </div>
+        </div>
+        <form class="booking-form" data-booking-form>
+          <div class="form-summary" aria-live="polite">
+            <span>Selected session</span>
+            <strong data-selected-session>Relaxation Massage • 1 Hour • ₦100,000</strong>
+          </div>
+          <label>
+            Service
+            <select name="service" required>
+              <option value="Relaxation Massage - 1 Hour - ₦100,000">Relaxation Massage — 1 Hour — ₦100,000</option>
+              <option value="Back, Neck & Shoulder Massage - 30 Minutes - ₦35,000">
+                Back, Neck & Shoulder — 30 Minutes — ₦35,000
+              </option>
+              <option value="Head & Scalp Massage - 30 Minutes - ₦35,000">
+                Head & Scalp Massage — 30 Minutes — ₦35,000
+              </option>
+            </select>
+          </label>
+          <label>
+            Preferred day
+            <select name="day" required>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </label>
+          <label>
+            Preferred time
+            <input name="time" type="text" placeholder="Example: 2PM" required />
+          </label>
+          <label>
+            Your name
+            <input name="name" type="text" placeholder="Your name" required />
+          </label>
+          <button class="button primary form-button" type="submit">Continue on WhatsApp</button>
+        </form>
+      </section>
+
+      <section class="section socials-section reveal">
+        <div class="section-heading">
+          <p class="eyebrow">Watch & Follow</p>
+          <h2>Soft sounds, massage moments, and behind the scenes.</h2>
+        </div>
+        <div class="social-grid">
+          <a href="https://youtu.be/RwskMs5i46Y?si=KXnVtAtianSpgQkp" target="_blank" rel="noreferrer">
+            <span>YouTube</span>
+            <strong>Suzzy's ASMR</strong>
+          </a>
+          <a href="https://vt.tiktok.com/ZSxbJuHQj/" target="_blank" rel="noreferrer">
+            <span>TikTok</span>
+            <strong>@Suzzy's ASMR</strong>
+          </a>
+          <a href="https://vt.tiktok.com/ZSxbecJbb/" target="_blank" rel="noreferrer">
+            <span>TikTok</span>
+            <strong>@suzzyherself</strong>
+          </a>
+          <a href="https://www.instagram.com/efionayi_susan/" target="_blank" rel="noreferrer">
+            <span>Instagram</span>
+            <strong>@efionayi_susan</strong>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="contact">
+      <div>
+        <a class="brand footer-brand" href="#top" aria-label="Suzzy's ASMR home">
+          <span class="brand-mark">S</span>
+          <span>Suzzy's ASMR</span>
+        </a>
+        <p>Royal Pine Gate 3, Orchid Road, Lekki, Lagos State</p>
+      </div>
+      <div class="footer-links">
+        <a href="mailto:Susanefionayi@gmail.com">Susanefionayi@gmail.com</a>
+        <a href="tel:+2347044325816">07044325816</a>
+        <a href="https://wa.me/2347044325816" target="_blank" rel="noreferrer">WhatsApp Booking</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
