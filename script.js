@@ -154,7 +154,7 @@ bookingForm?.addEventListener("submit", (event) => {
 
   const formData = new FormData(bookingForm);
   const message = [
-    "Hello Suzzy's ASMR, I would like to book a session.",
+    "Hello Suzzy’s ASMR, I would like to book a session.",
     "",
     `Service: ${formData.get("service")}`,
     `Preferred day: ${formData.get("day")}`,
