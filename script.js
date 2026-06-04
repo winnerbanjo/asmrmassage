@@ -10,6 +10,12 @@ const moodOutput = document.querySelector("[data-mood-output]");
 const selectedSession = document.querySelector("[data-selected-session]");
 const nextWindow = document.querySelector("[data-next-window]");
 const revealItems = document.querySelectorAll(".reveal");
+const bookingNote = document.querySelector("[data-booking-note]");
+const adminList = document.querySelector("[data-admin-list]");
+const adminEmpty = document.querySelector("[data-admin-empty]");
+const adminCount = document.querySelector("[data-admin-count]");
+const clearBookingsButton = document.querySelector("[data-clear-bookings]");
+const bookingsStorageKey = "suzzy-asmr-bookings";
 
 const serviceSummaries = {
   "Relaxation Massage - 1 Hour - ₦100,000": "Relaxation Massage • 1 Hour • ₦100,000",
@@ -31,6 +37,65 @@ const bookingWindows = {
   Friday: "Friday, 10AM - 8PM",
   Saturday: "Saturday, 10AM - 8PM",
   Sunday: "Sunday, 1PM - 5PM",
+};
+
+const getBookings = () => JSON.parse(localStorage.getItem(bookingsStorageKey) || "[]");
+
+const saveBookings = (bookings) => {
+  localStorage.setItem(bookingsStorageKey, JSON.stringify(bookings));
+};
+
+const escapeHtml = (value) =>
+  String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+const fileToDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => resolve(reader.result));
+    reader.addEventListener("error", () => reject(reader.error));
+    reader.readAsDataURL(file);
+  });
+
+const renderAdminBookings = () => {
+  if (!adminList || !adminEmpty || !adminCount) {
+    return;
+  }
+
+  const bookings = getBookings();
+  adminCount.textContent = `${bookings.length} ${bookings.length === 1 ? "request" : "requests"}`;
+  adminEmpty.hidden = bookings.length > 0;
+
+  adminList.innerHTML = bookings
+    .map(
+      (booking) => `
+        <article class="admin-card">
+          <div>
+            <span>${escapeHtml(booking.reference)}</span>
+            <h3>${escapeHtml(booking.name)}</h3>
+            <p>${escapeHtml(booking.service)}</p>
+            <strong class="admin-status">${escapeHtml(booking.status)}</strong>
+          </div>
+          <div class="admin-meta">
+            <strong>${escapeHtml(booking.day)} • ${escapeHtml(booking.time)}</strong>
+            <span>${escapeHtml(booking.phone)}</span>
+            <span>${escapeHtml(booking.email)}</span>
+            <span>Submitted ${escapeHtml(booking.submittedAt)}</span>
+          </div>
+          <div class="admin-actions">
+            <a href="${booking.receiptData}" download="${escapeHtml(booking.receiptName)}">Receipt</a>
+            <button type="button" data-status="${booking.id}" data-next-status="Confirmed">Confirm</button>
+            <button type="button" data-status="${booking.id}" data-next-status="Cancelled">Cancel</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
 };
 
 navToggle?.addEventListener("click", () => {
@@ -153,14 +218,74 @@ bookingForm?.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const formData = new FormData(bookingForm);
-  const message = [
-    "Hello Suzzy’s ASMR, I would like to book a session.",
-    "",
-    `Service: ${formData.get("service")}`,
-    `Preferred day: ${formData.get("day")}`,
-    `Preferred time: ${formData.get("time")}`,
-    `Name: ${formData.get("name")}`,
-  ].join("\n");
+  const receipt = formData.get("receipt");
 
-  window.open(`https://wa.me/2347044325816?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+  if (!receipt || receipt.size === 0) {
+    bookingNote.textContent = "Please upload your payment receipt.";
+    return;
+  }
+
+  if (receipt.size > 2 * 1024 * 1024) {
+    bookingNote.textContent = "Please upload a receipt smaller than 2MB.";
+    return;
+  }
+
+  bookingNote.textContent = "Saving your booking request...";
+
+  fileToDataUrl(receipt)
+    .then((receiptData) => {
+      const booking = {
+        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
+        reference: `SASMR-${Date.now().toString().slice(-6)}`,
+        service: formData.get("service"),
+        day: formData.get("day"),
+        time: formData.get("time"),
+        name: formData.get("name"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        receiptName: receipt.name,
+        receiptData,
+        status: "Pending",
+        submittedAt: new Date().toLocaleString([], {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+
+      const bookings = [booking, ...getBookings()];
+      saveBookings(bookings);
+      renderAdminBookings();
+      bookingForm.reset();
+      syncSelectedService("Relaxation Massage - 1 Hour - ₦100,000");
+      bookingNote.textContent = `Booking request submitted. Reference: ${booking.reference}`;
+      document.querySelector("#admin")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    })
+    .catch(() => {
+      bookingNote.textContent = "Could not save this receipt. Please try another file.";
+    });
 });
+
+adminList?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-status]");
+
+  if (!button) {
+    return;
+  }
+
+  const bookings = getBookings().map((booking) =>
+    booking.id === button.dataset.status ? { ...booking, status: button.dataset.nextStatus } : booking
+  );
+
+  saveBookings(bookings);
+  renderAdminBookings();
+});
+
+clearBookingsButton?.addEventListener("click", () => {
+  saveBookings([]);
+  renderAdminBookings();
+});
+
+renderAdminBookings();
