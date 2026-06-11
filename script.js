@@ -16,9 +16,10 @@ const adminEmpty = document.querySelector("[data-admin-empty]");
 const adminCount = document.querySelector("[data-admin-count]");
 const clearBookingsButton = document.querySelector("[data-clear-bookings]");
 const bookingsStorageKey = "suzzy-asmr-bookings";
+const ownerWhatsAppNumber = "2347044325816";
 
 const serviceSummaries = {
-  "Relaxation Massage - 1 Hour - ₦100,000": "Relaxation Massage • 1 Hour • ₦100,000",
+  "Relaxation Massage - 1 Hour - ₦90,000": "Relaxation Massage • 1 Hour • ₦90,000",
   "Back, Neck & Shoulder Massage - 30 Minutes - ₦35,000": "Back, Neck & Shoulder • 30 Minutes • ₦35,000",
   "Head & Scalp Massage - 30 Minutes - ₦35,000": "Head & Scalp Massage • 30 Minutes • ₦35,000",
 };
@@ -96,6 +97,32 @@ const renderAdminBookings = () => {
       `
     )
     .join("");
+};
+
+const notifyOwnerOnWhatsApp = (booking, notificationWindow) => {
+  const message = [
+    "New Suzzy’s ASMR booking request",
+    "",
+    `Reference: ${booking.reference}`,
+    `Name: ${booking.name}`,
+    `Phone: ${booking.phone}`,
+    `Email: ${booking.email}`,
+    `Service: ${booking.service}`,
+    `Preferred day: ${booking.day}`,
+    `Preferred time: ${booking.time}`,
+    `Receipt uploaded: ${booking.receiptName}`,
+    "",
+    "Please check the admin section for the receipt.",
+  ].join("\n");
+
+  const whatsappUrl = `https://wa.me/${ownerWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+
+  if (notificationWindow) {
+    notificationWindow.location.href = whatsappUrl;
+    return;
+  }
+
+  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 };
 
 navToggle?.addEventListener("click", () => {
@@ -231,6 +258,7 @@ bookingForm?.addEventListener("submit", (event) => {
   }
 
   bookingNote.textContent = "Saving your booking request...";
+  const notificationWindow = window.open("", "_blank");
 
   fileToDataUrl(receipt)
     .then((receiptData) => {
@@ -259,11 +287,13 @@ bookingForm?.addEventListener("submit", (event) => {
       saveBookings(bookings);
       renderAdminBookings();
       bookingForm.reset();
-      syncSelectedService("Relaxation Massage - 1 Hour - ₦100,000");
-      bookingNote.textContent = `Booking request submitted. Reference: ${booking.reference}`;
+      syncSelectedService("Relaxation Massage - 1 Hour - ₦90,000");
+      bookingNote.textContent = `Booking request submitted. Reference: ${booking.reference}. WhatsApp notification is opening now.`;
+      notifyOwnerOnWhatsApp(booking, notificationWindow);
       document.querySelector("#admin")?.scrollIntoView({ behavior: "smooth", block: "start" });
     })
     .catch(() => {
+      notificationWindow?.close();
       bookingNote.textContent = "Could not save this receipt. Please try another file.";
     });
 });
