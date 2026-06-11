@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suzzy’s ASMR Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Back to Suzzy’s ASMR">
+        <span class="brand-mark">S</span>
+        <span>Suzzy’s ASMR</span>
+      </a>
+      <nav class="nav-links admin-nav">
+        <a href="index.html">Website</a>
+        <a href="#bookings" class="is-active">Bookings</a>
+      </nav>
+      <button class="header-cta" type="button" data-admin-logout>Log Out</button>
+    </header>
+
+    <main class="admin-shell" id="bookings">
+      <section class="admin-hero">
+        <p class="eyebrow">Mini Admin</p>
+        <h1>Booking requests</h1>
+        <p>Check receipt uploads, contact clients, and update booking status.</p>
+      </section>
+
+      <section class="admin-login" data-admin-login>
+        <form class="booking-form admin-login-form" data-admin-login-form>
+          <div class="form-summary">
+            <span>Private access</span>
+            <strong>Enter admin PIN</strong>
+          </div>
+          <label>
+            Admin PIN
+            <input name="pin" type="password" placeholder="Enter PIN" required />
+          </label>
+          <button class="button primary form-button" type="submit">Open Admin</button>
+          <p class="booking-note" data-admin-message aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="admin-panel is-hidden" data-admin-dashboard>
+        <div class="admin-toolbar">
+          <div>
+            <span>Stored bookings</span>
+            <strong data-admin-count>0 requests</strong>
+          </div>
+          <div class="admin-toolbar-actions">
+            <button class="button secondary dark-button" type="button" data-refresh-bookings>Refresh</button>
+            <button class="button secondary dark-button danger-button" type="button" data-clear-bookings>Clear All</button>
+          </div>
+        </div>
+        <div class="admin-empty" data-admin-empty>No booking requests yet.</div>
+        <div class="admin-list" data-admin-list></div>
+      </section>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

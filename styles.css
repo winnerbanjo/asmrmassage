@@ -763,6 +763,50 @@ button {
   padding-top: 28px;
 }
 
+.admin-page {
+  min-height: 100vh;
+}
+
+.admin-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 150px 0 70px;
+}
+
+.admin-hero {
+  max-width: 720px;
+  margin-bottom: 34px;
+}
+
+.admin-hero h1 {
+  margin: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(42px, 7vw, 82px);
+  line-height: 1;
+}
+
+.admin-hero p:not(.eyebrow) {
+  max-width: 560px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.admin-login {
+  width: min(520px, 100%);
+}
+
+.admin-login-form {
+  box-shadow: var(--shadow);
+}
+
+.admin-nav {
+  justify-content: end;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
 .admin-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -779,6 +823,12 @@ button {
   padding: 22px;
   border-bottom: 1px solid var(--line);
   background: var(--mist);
+}
+
+.admin-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .admin-toolbar span,
@@ -800,6 +850,10 @@ button {
   border: 1px solid var(--line);
   background: var(--ink);
   color: #fff;
+}
+
+.danger-button {
+  background: #7a2626;
 }
 
 .admin-empty {
@@ -853,6 +907,16 @@ button {
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.admin-status.confirmed {
+  background: #d7efe0;
+  color: #1c5a36;
+}
+
+.admin-status.cancelled {
+  background: #f4d7d2;
+  color: #803322;
 }
 
 .admin-actions {
@@ -1014,6 +1078,21 @@ button {
     display: none;
   }
 
+  .admin-page .nav-links {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: start;
+    gap: 18px;
+    padding: 10px 4px 0;
+  }
+
+  .admin-page .header-cta {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    width: fit-content;
+    min-height: 40px;
+  }
+
   .site-header.nav-open {
     grid-template-columns: auto auto;
     border-radius: 24px;
@@ -1100,6 +1179,15 @@ button {
   .admin-toolbar {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .admin-shell {
+    width: min(100% - 24px, 680px);
+    padding-top: 120px;
+  }
+
+  .admin-toolbar-actions {
+    display: grid;
   }
 }
 

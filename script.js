@@ -11,11 +11,6 @@ const selectedSession = document.querySelector("[data-selected-session]");
 const nextWindow = document.querySelector("[data-next-window]");
 const revealItems = document.querySelectorAll(".reveal");
 const bookingNote = document.querySelector("[data-booking-note]");
-const adminList = document.querySelector("[data-admin-list]");
-const adminEmpty = document.querySelector("[data-admin-empty]");
-const adminCount = document.querySelector("[data-admin-count]");
-const clearBookingsButton = document.querySelector("[data-clear-bookings]");
-const bookingsStorageKey = "suzzy-asmr-bookings";
 const ownerWhatsAppNumber = "2347044325816";
 
 const serviceSummaries = {
@@ -40,20 +35,6 @@ const bookingWindows = {
   Sunday: "Sunday, 1PM - 5PM",
 };
 
-const getBookings = () => JSON.parse(localStorage.getItem(bookingsStorageKey) || "[]");
-
-const saveBookings = (bookings) => {
-  localStorage.setItem(bookingsStorageKey, JSON.stringify(bookings));
-};
-
-const escapeHtml = (value) =>
-  String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-
 const fileToDataUrl = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -62,42 +43,6 @@ const fileToDataUrl = (file) =>
     reader.addEventListener("error", () => reject(reader.error));
     reader.readAsDataURL(file);
   });
-
-const renderAdminBookings = () => {
-  if (!adminList || !adminEmpty || !adminCount) {
-    return;
-  }
-
-  const bookings = getBookings();
-  adminCount.textContent = `${bookings.length} ${bookings.length === 1 ? "request" : "requests"}`;
-  adminEmpty.hidden = bookings.length > 0;
-
-  adminList.innerHTML = bookings
-    .map(
-      (booking) => `
-        <article class="admin-card">
-          <div>
-            <span>${escapeHtml(booking.reference)}</span>
-            <h3>${escapeHtml(booking.name)}</h3>
-            <p>${escapeHtml(booking.service)}</p>
-            <strong class="admin-status">${escapeHtml(booking.status)}</strong>
-          </div>
-          <div class="admin-meta">
-            <strong>${escapeHtml(booking.day)} • ${escapeHtml(booking.time)}</strong>
-            <span>${escapeHtml(booking.phone)}</span>
-            <span>${escapeHtml(booking.email)}</span>
-            <span>Submitted ${escapeHtml(booking.submittedAt)}</span>
-          </div>
-          <div class="admin-actions">
-            <a href="${booking.receiptData}" download="${escapeHtml(booking.receiptName)}">Receipt</a>
-            <button type="button" data-status="${booking.id}" data-next-status="Confirmed">Confirm</button>
-            <button type="button" data-status="${booking.id}" data-next-status="Cancelled">Cancel</button>
-          </div>
-        </article>
-      `
-    )
-    .join("");
-};
 
 const notifyOwnerOnWhatsApp = (booking, notificationWindow) => {
   const message = [
@@ -111,9 +56,12 @@ const notifyOwnerOnWhatsApp = (booking, notificationWindow) => {
     `Preferred day: ${booking.day}`,
     `Preferred time: ${booking.time}`,
     `Receipt uploaded: ${booking.receiptName}`,
+    booking.receiptUrl ? `Receipt link: ${booking.receiptUrl}` : "",
     "",
-    "Please check the admin section for the receipt.",
-  ].join("\n");
+    "Please check the admin page for the full booking.",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const whatsappUrl = `https://wa.me/${ownerWhatsAppNumber}?text=${encodeURIComponent(message)}`;
 
@@ -261,10 +209,13 @@ bookingForm?.addEventListener("submit", (event) => {
   const notificationWindow = window.open("", "_blank");
 
   fileToDataUrl(receipt)
-    .then((receiptData) => {
-      const booking = {
-        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
-        reference: `SASMR-${Date.now().toString().slice(-6)}`,
+    .then((receiptData) =>
+      fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
         service: formData.get("service"),
         day: formData.get("day"),
         time: formData.get("time"),
@@ -273,49 +224,24 @@ bookingForm?.addEventListener("submit", (event) => {
         email: formData.get("email"),
         receiptName: receipt.name,
         receiptData,
-        status: "Pending",
-        submittedAt: new Date().toLocaleString([], {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
         }),
-      };
+      })
+    )
+    .then(async (response) => {
+      const data = await response.json().catch(() => ({}));
 
-      const bookings = [booking, ...getBookings()];
-      saveBookings(bookings);
-      renderAdminBookings();
+      if (!response.ok) {
+        throw new Error(data.error || "Could not submit booking");
+      }
+
+      const { booking } = data;
       bookingForm.reset();
       syncSelectedService("Relaxation Massage - 1 Hour - ₦90,000");
       bookingNote.textContent = `Booking request submitted. Reference: ${booking.reference}. WhatsApp notification is opening now.`;
       notifyOwnerOnWhatsApp(booking, notificationWindow);
-      document.querySelector("#admin")?.scrollIntoView({ behavior: "smooth", block: "start" });
     })
-    .catch(() => {
+    .catch((error) => {
       notificationWindow?.close();
-      bookingNote.textContent = "Could not save this receipt. Please try another file.";
+      bookingNote.textContent = `${error.message}. Please try again or contact Suzzy on WhatsApp.`;
     });
 });
-
-adminList?.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-status]");
-
-  if (!button) {
-    return;
-  }
-
-  const bookings = getBookings().map((booking) =>
-    booking.id === button.dataset.status ? { ...booking, status: button.dataset.nextStatus } : booking
-  );
-
-  saveBookings(bookings);
-  renderAdminBookings();
-});
-
-clearBookingsButton?.addEventListener("click", () => {
-  saveBookings([]);
-  renderAdminBookings();
-});
-
-renderAdminBookings();
